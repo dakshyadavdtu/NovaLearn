@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-const client = axios.create({ baseURL });
+const client = axios.create({
+  baseURL,
+  withCredentials: true,
+});
 
 export async function signup({ name, email, password, role = 'student' }) {
   const { data } = await client.post('/api/auth/signup', {
