@@ -1,8 +1,10 @@
 import { Router } from 'express';
+import { auth } from '../middlewares/auth.js';
+import * as userController from '../controllers/userController.js';
 
 const router = Router();
 
-// placeholder
-router.get('/', (req, res) => res.json({ message: 'user' }));
+router.get('/me', auth, userController.getMe);
+router.get('/ping-auth', auth, userController.pingAuth);
 
 export default router;

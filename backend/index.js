@@ -33,7 +33,6 @@ app.use(
     credentials: true,
   })
 );
-app.use(cookieParser());
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -44,8 +43,9 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use(cookieParser());
+app.use('/api/auth', authRoutes);
 app.use('/api/course', courseRoutes);
 
 connectDb()
