@@ -10,10 +10,11 @@ function safeUser(user) {
 }
 
 function getCookieOptions() {
+  const isProd = process.env.NODE_ENV === 'production';
   return {
     httpOnly: true,
-    sameSite: 'none',
-    secure: true,
+    sameSite: isProd ? 'none' : 'lax',
+    secure: isProd,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   };
 }
@@ -74,10 +75,11 @@ export async function login(req, res) {
 }
 
 export async function logout(req, res) {
+  const isProd = process.env.NODE_ENV === 'production';
   res.clearCookie('token', {
     httpOnly: true,
-    sameSite: 'none',
-    secure: true,
+    sameSite: isProd ? 'none' : 'lax',
+    secure: isProd,
   });
   return res.json({ ok: true });
 }
