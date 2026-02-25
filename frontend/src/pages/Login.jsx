@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { setUser } from '../redux/userSlice';
 import * as authApi from '../api/auth';
 
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,6 +30,7 @@ function Login() {
     setLoading(true);
     try {
       const { user } = await authApi.login(email.trim(), password);
+      dispatch(setUser(user));
       toast.success(`Welcome back, ${user?.name || 'User'}`);
       navigate('/');
     } catch (err) {
