@@ -1,10 +1,15 @@
 # LMS
 
-Copy `frontend/.env.example` and `backend/.env.example` to `.env` in each folder, then:
+Tiny notes so we remember how this thing boots.
 
-- **Backend:** `cd backend && npm run dev`
-- **Frontend:** `cd frontend && npm run dev`
+**Apps**
+- `frontend/` → Vite + React UI (5173)
+- `backend/` → Express API (8000)
 
-Frontend talks to the API URL in its env (e.g. `VITE_API_URL`). Backend port and CORS origin are in its `.env`.
+**Env**
+- Copy `frontend/.env.example` → `frontend/.env` (sets `VITE_API_URL`)
+- Copy `backend/.env.example` → `backend/.env` (PORT, `FRONTEND_URL`, `DB_URI`)
 
-Auth is cookie-based: signup, login, and logout live under `/api/auth`. Set `JWT_SECRET` in backend `.env` or those won’t work.
+**Run local**
+- Backend: `cd backend && npm run dev`
+- Frontend: `cd frontend && npm run dev`
