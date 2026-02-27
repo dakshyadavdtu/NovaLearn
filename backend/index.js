@@ -1,56 +1,47 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { connectDb } from './config/db.js';
-import authRoutes from './routes/auth.js';
-import userRoutes from './routes/user.js';
-import courseRoutes from './routes/course.js';
+import authRouter from './routes/auth.js';
+import userRouter from './routes/user.js';
+import courseRouter from './routes/course.js';
+
+dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  process.env.CORS_ORIGIN,
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-].filter(Boolean);
-
+app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
-    origin: (origin, cb) => {
-      if (!origin) {
-        cb(null, true);
-        return;
-      }
-      if (allowedOrigins.includes(origin)) {
-        cb(null, origin);
-        return;
-      }
-      cb(new Error('Not allowed by CORS'));
-    },
+    origin:
+      process.env.FRONTEND_URL ||
+      process.env.CORS_ORIGIN ||
+      'http://localhost:5173',
     credentials: true,
   })
 );
-app.use(cookieParser());
-app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.type('text/plain').send('OK');
+  res.type('text/plain').send('LMS API');
 });
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/course', courseRoutes);
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/course', courseRouter);
 
 connectDb()
-  .then(() => app.listen(port, () => console.log(`Server on ${port}`)))
   .catch((err) => {
     console.warn('DB connect failed', err?.message || err);
-    app.listen(port, () => console.log(`Server on ${port} (no DB)`));
+  })
+  .finally(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
   });

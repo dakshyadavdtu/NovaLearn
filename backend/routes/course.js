@@ -2,7 +2,8 @@ import { Router } from 'express';
 
 const router = Router();
 
-// placeholder
-router.get('/', (req, res) => res.json({ message: 'course' }));
+router.get('/', (req, res) => {
+  res.json({ route: 'course' });
+});
 
 export default router;
